@@ -6,4 +6,6 @@ const SideMenu = () => {
 
 export default SideMenu;
 
-const Container = styled.div``;
+const Container = styled.div`
+  width: 10rem;
+`;
