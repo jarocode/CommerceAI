@@ -1,11 +1,15 @@
 "use client";
 
-import styled from "@emotion/styled";
+import ChatBoard from "./components/ChatBoard";
+import ChatHistory from "./components/ChatHistory";
 
-const page = () => {
-  return <Container>chatbot</Container>;
+const Page = () => {
+  return (
+    <>
+      <ChatBoard />
+      <ChatHistory />
+    </>
+  );
 };
 
-export default page;
-
-const Container = styled.div``;
+export default Page;

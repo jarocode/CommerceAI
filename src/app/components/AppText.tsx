@@ -8,6 +8,7 @@ const AppText = (props: any) => {
   return (
     <Typography
       color={colors.text}
+      fontSize={"14px"}
       fontWeight={
         props.type === "header"
           ? 700

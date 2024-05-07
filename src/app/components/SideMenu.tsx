@@ -57,9 +57,7 @@ const SideMenu = () => {
         <IoChevronBack />
       </Collapse>
       <MainMenu>
-        <AppText color="#BCBBBF" fontSize="14px">
-          Main Menu
-        </AppText>
+        <AppText color="#BCBBBF">Main Menu</AppText>
         <MenuDiv>
           {menu.map((menu) => {
             const { name } = menu;
@@ -89,7 +87,7 @@ const SideMenu = () => {
 export default SideMenu;
 
 const Container = styled.div`
-  position: relative;
+  position: fixed;
   width: 14rem;
   height: 100vh;
   background: ${colors.white};

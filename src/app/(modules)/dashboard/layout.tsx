@@ -1,7 +1,7 @@
 import DashboardHeader from "components/DashboardHeader";
 import SideMenu from "components/SideMenu";
 
-export default function RootLayout({
+export default function DashboardLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
@@ -11,7 +11,7 @@ export default function RootLayout({
       <body>
         <DashboardHeader />
         <SideMenu />
-        <div style={{ padding: "7rem 2rem 2rem 14rem" }}>{children}</div>
+        <div style={{ padding: "7rem 2rem 2rem 16rem" }}>{children}</div>
       </body>
     </html>
   );
