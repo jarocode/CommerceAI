@@ -1,11 +1,13 @@
 import React from "react";
 import { Typography } from "@mui/material";
 
-import { raleway } from "../theme/fonts";
+import { raleway } from "theme/fonts";
+import { colors } from "theme/colors";
 
 const AppText = (props: any) => {
   return (
     <Typography
+      color={colors.text}
       fontWeight={
         props.type === "header"
           ? 700

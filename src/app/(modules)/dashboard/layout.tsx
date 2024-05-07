@@ -1,4 +1,5 @@
-import SideMenu from "@/app/components/SideMenu";
+import DashboardHeader from "components/DashboardHeader";
+import SideMenu from "components/SideMenu";
 
 export default function RootLayout({
   children,
@@ -8,8 +9,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
+        <DashboardHeader />
         <SideMenu />
-        {children}
+        <div style={{ padding: "7rem 2rem 2rem 14rem" }}>{children}</div>
       </body>
     </html>
   );
