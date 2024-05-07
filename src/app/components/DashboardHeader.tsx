@@ -6,6 +6,7 @@ import { RiSearchLine } from "react-icons/ri";
 import { IoNotificationsOutline } from "react-icons/io5";
 
 import { colors } from "theme/colors";
+import avatarImg from "assets/images/jpg/UcheAI.jpg";
 import AppText from "./AppText";
 
 const DashboardHeader = () => {
@@ -23,8 +24,8 @@ const DashboardHeader = () => {
         <AvatarDiv>
           <Avatar
             alt="user avatar"
-            src={"../../assets/images/jpg/UcheAI.jpg"}
-            sx={{ width: 24, height: 24 }}
+            src={avatarImg.src}
+            sx={{ width: 28, height: 28 }}
           />
           <AppText fontSize="14px">Okolie Uchenna</AppText>
         </AvatarDiv>

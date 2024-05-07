@@ -9,6 +9,8 @@ const ChatBoard = () => {
   return (
     <Container>
       <AppChat />
+      <AppChat isUser />
+      <AppChat />
     </Container>
   );
 };
@@ -17,6 +19,9 @@ export default ChatBoard;
 
 const Container = styled.div`
   background: ${colors.white};
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
   height: 75vh;
   margin-right: 18rem;
   border: 1px solid #f2f3f1;

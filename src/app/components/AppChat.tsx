@@ -1,4 +1,5 @@
 import styled from "@emotion/styled";
+import { Avatar } from "@mui/material";
 import {
   MdOutlineShoppingCartCheckout,
   MdOutlineContentCopy,
@@ -6,14 +7,31 @@ import {
 import { GoThumbsdown, GoThumbsup } from "react-icons/go";
 
 import { colors } from "theme/colors";
+import avatarImg from "assets/images/jpg/UcheAI.jpg";
 import AppText from "./AppText";
 
-const AppChat = () => {
+interface AppChatProps {
+  isUser?: boolean;
+}
+
+interface ContainerProps {
+  isUser?: boolean;
+}
+
+const AppChat = ({ isUser }: AppChatProps) => {
   return (
-    <Container>
-      <Logo>
-        <MdOutlineShoppingCartCheckout color={colors.white} size="12px" />
-      </Logo>
+    <Container isUser={isUser}>
+      {isUser ? (
+        <Avatar
+          alt="user avatar"
+          src={avatarImg.src}
+          sx={{ width: 35, height: 35 }}
+        />
+      ) : (
+        <Logo>
+          <MdOutlineShoppingCartCheckout color={colors.white} size="12px" />
+        </Logo>
+      )}
       <TextDiv>
         <AppText lineHeight="1.5rem">
           Lorem ipsum dolor sit amet consectetur, adipisicing elit. Perspiciatis
@@ -21,20 +39,24 @@ const AppChat = () => {
           repellendus error alias maiores dolor. Dignissimos suscipit harum
           delectus, fugiat dolore voluptatibus?
         </AppText>
-        <Actions>
-          <Left>
-            <CircleDiv>
-              <GoThumbsup color="#476584" style={{ cursor: "pointer" }} />
-            </CircleDiv>
-            <CircleDiv>
-              <GoThumbsdown color="#476584" style={{ cursor: "pointer" }} />
-            </CircleDiv>
-          </Left>
-          <CopyDiv>
-            <MdOutlineContentCopy color="#476584" />
-            <AppText color="#797979">Copy</AppText>
-          </CopyDiv>
-        </Actions>
+        {isUser ? (
+          <></>
+        ) : (
+          <Actions>
+            <Left>
+              <CircleDiv>
+                <GoThumbsup color="#476584" style={{ cursor: "pointer" }} />
+              </CircleDiv>
+              <CircleDiv>
+                <GoThumbsdown color="#476584" style={{ cursor: "pointer" }} />
+              </CircleDiv>
+            </Left>
+            <CopyDiv>
+              <MdOutlineContentCopy color="#476584" />
+              <AppText color="#797979">Copy</AppText>
+            </CopyDiv>
+          </Actions>
+        )}
       </TextDiv>
     </Container>
   );
@@ -42,11 +64,11 @@ const AppChat = () => {
 
 export default AppChat;
 
-const Container = styled.div`
+const Container = styled.div<ContainerProps>`
   display: flex;
   padding: 1rem;
   gap: 1rem;
-  background: #ece8f9;
+  background: ${(props) => (props.isUser ? "none" : colors.primaryLight)};
   border-radius: 10px;
 `;
 
