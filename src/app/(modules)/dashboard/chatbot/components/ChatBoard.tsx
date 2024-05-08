@@ -4,13 +4,15 @@ import styled from "@emotion/styled";
 
 import AppChat from "components/AppChat";
 import { colors } from "theme/colors";
+import ChatInput from "./ChatInput";
 
 const ChatBoard = () => {
   return (
     <Container>
-      <AppChat />
+      {/* <AppChat />
       <AppChat isUser />
-      <AppChat />
+      <AppChat /> */}
+      <ChatInput />
     </Container>
   );
 };
