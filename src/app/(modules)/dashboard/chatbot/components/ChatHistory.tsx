@@ -36,7 +36,7 @@ const Container = styled.div`
   position: fixed;
   top: 7rem;
   right: 2rem;
-  height: 80vh;
+  height: calc(100vh - 7rem);
   overflow: auto;
   width: 16rem;
   border: 1px solid #f2f3f1;
