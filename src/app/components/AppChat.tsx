@@ -11,6 +11,7 @@ import avatarImg from "assets/images/jpg/UcheAI.jpg";
 import AppText from "./AppText";
 
 interface AppChatProps {
+  message: string;
   isUser?: boolean;
 }
 
@@ -18,7 +19,7 @@ interface ContainerProps {
   isUser?: boolean;
 }
 
-const AppChat = ({ isUser }: AppChatProps) => {
+const AppChat = ({ message, isUser }: AppChatProps) => {
   return (
     <Container isUser={isUser}>
       {isUser ? (
@@ -33,12 +34,7 @@ const AppChat = ({ isUser }: AppChatProps) => {
         </Logo>
       )}
       <TextDiv>
-        <AppText lineHeight="1.5rem">
-          Lorem ipsum dolor sit amet consectetur, adipisicing elit. Perspiciatis
-          nisi aliquid provident quas ut nobis culpa dolore, possimus
-          repellendus error alias maiores dolor. Dignissimos suscipit harum
-          delectus, fugiat dolore voluptatibus?
-        </AppText>
+        <AppText lineHeight="1.5rem">{message}</AppText>
         {isUser ? (
           <></>
         ) : (

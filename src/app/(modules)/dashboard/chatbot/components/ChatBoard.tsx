@@ -1,18 +1,24 @@
-"use client";
-
+import { use } from "react";
 import styled from "@emotion/styled";
 
+import { ChatContext, ChatMessage } from "../context/ChatContext";
 import AppChat from "components/AppChat";
 import { colors } from "theme/colors";
 import ChatInput from "./ChatInput";
 
 const ChatBoard = () => {
+  const { chatMessages } = use(ChatContext);
+
   return (
     <Container>
       <ChatDiv>
-        <AppChat />
-        <AppChat isUser />
-        <AppChat />
+        {chatMessages
+          .filter((chatMessage: ChatMessage) => Boolean(chatMessage.message))
+          .map((chatMessage: ChatMessage) => {
+            const { message, type } = chatMessage;
+            const isUser = type === "Human";
+            return <AppChat key={message} isUser={isUser} message={message} />;
+          })}
       </ChatDiv>
       <ChatInput />
     </Container>

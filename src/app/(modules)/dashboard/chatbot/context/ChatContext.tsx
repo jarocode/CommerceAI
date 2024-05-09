@@ -2,21 +2,31 @@
 
 import { useState, createContext, JSX, Dispatch, SetStateAction } from "react";
 
+export interface ChatMessage {
+  message: string;
+  type: "Human" | "AI";
+}
+
 interface CampusTourContextValues {
-  chatMessage: string;
-  setChatMessage: Dispatch<SetStateAction<string>>;
+  chatMessages: Array<ChatMessage>;
+  setChatMessages: Dispatch<SetStateAction<Array<ChatMessage>>>;
 }
 
 export const ChatContext = createContext<CampusTourContextValues>({
-  chatMessage: "",
-  setChatMessage: () => null,
+  chatMessages: [{ message: "", type: "AI" }],
+  setChatMessages: () => null,
 });
 
 export const ChatProvider = ({ children }: { children: JSX.Element }) => {
-  const [chatMessage, setChatMessage] = useState("");
+  const [chatMessages, setChatMessages] = useState([
+    {
+      message: "",
+      type: "AI" as "AI" | "Human",
+    },
+  ]);
 
   return (
-    <ChatContext.Provider value={{ chatMessage, setChatMessage }}>
+    <ChatContext.Provider value={{ chatMessages, setChatMessages }}>
       {children}
     </ChatContext.Provider>
   );

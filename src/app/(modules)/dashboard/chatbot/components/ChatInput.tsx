@@ -1,16 +1,39 @@
+import { use, useState, ChangeEvent, KeyboardEvent } from "react";
 import styled from "@emotion/styled";
 import { IoDocumentAttachOutline } from "react-icons/io5";
 import { RiVoiceprintFill } from "react-icons/ri";
 import { IoIosSend } from "react-icons/io";
 import { TbEdit } from "react-icons/tb";
 
+import { ChatContext } from "../context/ChatContext";
 import { colors } from "theme/colors";
 import AppText from "components/AppText";
 
 const ChatInput = () => {
+  const [message, setMessage] = useState("");
+  const { setChatMessages } = use(ChatContext);
+
+  const handleChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
+    setMessage(e.target.value);
+  };
+
+  const handleClick = () => {
+    setChatMessages((prev) => [...prev, { message, type: "Human" }]);
+    setMessage("");
+  };
+
+  const handleKeyDown = (e: KeyboardEvent<HTMLDivElement>) => {
+    if (e.key == "13") handleClick();
+  };
+
   return (
     <Container>
-      <TextArea placeholder="Ask anything" rows={2} />
+      <TextArea
+        placeholder="Ask anything"
+        rows={2}
+        onChange={handleChange}
+        value={message}
+      />
       <Bottom>
         <Outer>
           <Div>
@@ -39,7 +62,7 @@ const ChatInput = () => {
               Improve
             </AppText>
           </Div>
-          <SendButton>
+          <SendButton onClick={handleClick} onKeyDown={handleKeyDown}>
             <IoIosSend color={colors.white} />
           </SendButton>
         </Outer>
