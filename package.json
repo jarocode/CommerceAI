@@ -11,7 +11,11 @@
   "dependencies": {
     "@emotion/react": "^11.11.4",
     "@emotion/styled": "^11.11.5",
+    "@langchain/community": "^0.0.55",
+    "@langchain/mongodb": "^0.0.1",
+    "@langchain/openai": "^0.0.28",
     "@mui/material": "^5.15.16",
+    "langchain": "^0.1.36",
     "next": "14.2.3",
     "react": "^18",
     "react-dom": "^18",
@@ -24,5 +28,8 @@
     "eslint": "^8",
     "eslint-config-next": "14.2.3",
     "typescript": "^5"
+  },
+  "overrides": {
+    "@langchain/core": "0.1.5"
   }
 }
