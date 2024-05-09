@@ -1,8 +1,5 @@
 export async function POST(request: Request) {
   try {
-    // const response = await mailchimp.lists.getAllLists();
-    // console.log("list", response);
-
     const { message } = await request.json();
 
     return Response.json(

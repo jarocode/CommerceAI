@@ -22,8 +22,8 @@ const ChatInput = () => {
     setMessage("");
   };
 
-  const handleKeyDown = (e: KeyboardEvent<HTMLDivElement>) => {
-    if (e.key == "13") handleClick();
+  const handleKeyDown = (e: KeyboardEvent<HTMLTextAreaElement>) => {
+    if (e.keyCode === 13) handleClick();
   };
 
   return (
@@ -32,6 +32,7 @@ const ChatInput = () => {
         placeholder="Ask anything"
         rows={2}
         onChange={handleChange}
+        onKeyDown={handleKeyDown}
         value={message}
       />
       <Bottom>
@@ -62,7 +63,7 @@ const ChatInput = () => {
               Improve
             </AppText>
           </Div>
-          <SendButton onClick={handleClick} onKeyDown={handleKeyDown}>
+          <SendButton onClick={handleClick}>
             <IoIosSend color={colors.white} />
           </SendButton>
         </Outer>
