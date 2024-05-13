@@ -1,25 +1,45 @@
 import { use, useState, ChangeEvent, KeyboardEvent } from "react";
 import styled from "@emotion/styled";
+import { useMutation } from "@tanstack/react-query";
+import { AxiosError } from "axios";
 import { IoDocumentAttachOutline } from "react-icons/io5";
 import { RiVoiceprintFill } from "react-icons/ri";
 import { IoIosSend } from "react-icons/io";
 import { TbEdit } from "react-icons/tb";
 
-import { ChatContext } from "../context/ChatContext";
+import { ChatContext, ChatMessage } from "../context/ChatContext";
 import { colors } from "theme/colors";
 import AppText from "components/AppText";
+import { chatbotApi } from "api-endpoints/chatBot";
+
+interface SendButtonProps {
+  disabled: boolean;
+}
 
 const ChatInput = () => {
   const [message, setMessage] = useState("");
   const { setChatMessages } = use(ChatContext);
+
+  const { mutate, isPending } = useMutation({
+    mutationFn: chatbotApi.chatShoppingAssistant,
+
+    onError: (error: AxiosError) => {
+      if (typeof error === "object") console.log(error);
+    },
+    onSuccess: (data: ChatMessage) => {
+      setChatMessages((prev) => [...prev, data]);
+    },
+  });
 
   const handleChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
     setMessage(e.target.value);
   };
 
   const handleClick = () => {
+    if (isPending) return;
     setChatMessages((prev) => [...prev, { message, type: "Human" }]);
     setMessage("");
+    mutate(message);
   };
 
   const handleKeyDown = (e: KeyboardEvent<HTMLTextAreaElement>) => {
@@ -63,7 +83,7 @@ const ChatInput = () => {
               Improve
             </AppText>
           </Div>
-          <SendButton onClick={handleClick}>
+          <SendButton disabled={isPending} onClick={handleClick}>
             <IoIosSend color={colors.white} />
           </SendButton>
         </Outer>
@@ -136,11 +156,11 @@ const Outer = styled.div`
   gap: 0.7rem;
 `;
 
-const SendButton = styled.div`
+const SendButton = styled.div<SendButtonProps>`
   display: flex;
   justify-content: center;
   align-items: center;
-  background: ${colors.dark};
+  background: ${(props) => (props.disabled ? "#cfcfcf" : colors.dark)};
   height: 2rem;
   width: 2rem;
   border-radius: 50%;

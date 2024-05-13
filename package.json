@@ -30,8 +30,5 @@
     "eslint": "^8",
     "eslint-config-next": "14.2.3",
     "typescript": "^5"
-  },
-  "overrides": {
-    "@langchain/core": "0.1.5"
   }
 }
