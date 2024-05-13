@@ -6,11 +6,13 @@ import {
 import { HumanMessage } from "@langchain/core/messages";
 
 import { LLM } from "llms";
+import { getMongoDBCollection } from "utils/dbConnect";
 
 export async function POST(request: Request) {
   try {
+    const collection = await getMongoDBCollection();
+    console.log("collection", collection);
     const { message } = await request.json();
-    console.log("humanMessage", message);
 
     const model = LLM.chatOpenAI;
     const prompt = ChatPromptTemplate.fromMessages([
@@ -26,8 +28,6 @@ export async function POST(request: Request) {
     const { content } = await chain.invoke({
       messages: [new HumanMessage(message)],
     });
-
-    console.log("response", content);
 
     const messageData = {
       message: content,
