@@ -2,32 +2,42 @@ import {
   ChatPromptTemplate,
   MessagesPlaceholder,
 } from "@langchain/core/prompts";
-
-import { HumanMessage } from "@langchain/core/messages";
+import { HumanMessage, AIMessage } from "@langchain/core/messages";
+import { MongoDBChatMessageHistory } from "@langchain/mongodb";
+import { ObjectId } from "mongodb";
 
 import { LLM } from "llms";
 import { getMongoDBCollection } from "utils/dbConnect";
+import { qaPrompt } from "./prompts";
+
+const sessionId = new ObjectId().toString();
 
 export async function POST(request: Request) {
   try {
     const collection = await getMongoDBCollection();
-    console.log("collection", collection);
+
     const { message } = await request.json();
 
     const model = LLM.chatOpenAI;
     const prompt = ChatPromptTemplate.fromMessages([
-      [
-        "system",
-        "You are a helpful assistant. Answer all questions to the best of your ability.",
-      ],
+      ["system", qaPrompt],
       new MessagesPlaceholder("messages"),
     ]);
 
     const chain = prompt.pipe(model);
 
-    const { content } = await chain.invoke({
-      messages: [new HumanMessage(message)],
+    const messageHistory = new MongoDBChatMessageHistory({
+      sessionId,
+      collection,
     });
+
+    await messageHistory.addMessage(new HumanMessage(message));
+
+    const { content } = await chain.invoke({
+      messages: await messageHistory.getMessages(),
+    });
+
+    await messageHistory.addMessage(new AIMessage(content.toString()));
 
     const messageData = {
       message: content,
