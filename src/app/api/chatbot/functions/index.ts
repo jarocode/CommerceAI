@@ -1,3 +1,4 @@
+import axios from "axios";
 import { request } from "https";
 
 const getOptions = (path: string) => {
@@ -7,14 +8,16 @@ const getOptions = (path: string) => {
     port: null,
     path,
     headers: {
-      Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
+      Authorization: `Bearer ${process.env.BROWSEAI_API_KEY}`,
     },
   };
 };
 
-export async function scrapeDataFromStore(): Promise<string> {
+export async function scrapeProductDataFromStore(
+  product: string
+): Promise<string> {
   return new Promise<string>((resolve, reject) => {
-    const path = `/v2/robots/${process.env.ROBOT_ID}/tasks`;
+    const path = `/v2/robots/${process.env.AMAZON_ROBOT_ID}/tasks`;
     const options = getOptions(path);
     const req = request(options, async (res) => {
       const chunks: Buffer[] = [];
@@ -26,7 +29,7 @@ export async function scrapeDataFromStore(): Promise<string> {
       res.on("end", async () => {
         try {
           const body = Buffer.concat(chunks);
-          resolve(body.toString());
+          resolve(JSON.parse(body.toString())?.result.id);
         } catch (error) {
           reject(error);
         }
@@ -38,11 +41,40 @@ export async function scrapeDataFromStore(): Promise<string> {
     req.write(
       JSON.stringify({
         inputParameters: {
-          originUrl:
-            "https://www.espressozone.com/espresso-machines/semi-automatic-espresso-machines",
+          amazon_url: `${process.env.AMAZON_URL}${product}`,
+          max_products: process.env.MAX_PRODUCTS,
         },
       })
     );
     req.end();
   });
+}
+
+export async function pollRobotTaskRetrieval(taskId: string) {
+  let status: string | undefined;
+  let scrapedProductData: any;
+  async function retrieveRobotTask() {
+    try {
+      const response = await axios.get(
+        `https://api.browse.ai/v2/robots/${process.env.AMAZON_ROBOT_ID}/tasks/${taskId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${process.env.BROWSEAI_API_KEY}`,
+          },
+        }
+      );
+      status = response?.data?.result.status;
+      scrapedProductData = response?.data?.result?.capturedLists?.Products;
+    } catch (error) {
+      console.error("error", error);
+    }
+  }
+  await retrieveRobotTask(); // Make an initial request immediately
+
+  while (status !== "successful") {
+    await retrieveRobotTask();
+    await new Promise((resolve) => setTimeout(resolve, 15000));
+  }
+
+  return scrapedProductData;
 }

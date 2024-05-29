@@ -10,68 +10,55 @@ import { request as httpRequest } from "https";
 import { LLM } from "llms";
 import { getMongoDBCollection } from "utils/dbConnect";
 import { qaPrompt } from "./prompts";
+import {
+  pollRobotTaskRetrieval,
+  scrapeProductDataFromStore,
+} from "./functions";
 
 const sessionId = new ObjectId().toString();
 
-const options = {
-  method: "GET",
-  hostname: "api.browse.ai",
-  port: null,
-  path: "/v2/robots",
-  headers: {
-    Authorization: `Bearer ${process.env.BROWSEAI_API_KEY}`,
-  },
-};
 export async function POST(request: Request) {
   try {
-    const req = httpRequest(options, function (res) {
-      const chunks: any[] | Uint8Array[] = [];
+    const taskId = await scrapeProductDataFromStore(
+      "iphone15 promax black color"
+    );
 
-      res.on("data", function (chunk) {
-        chunks.push(chunk);
-      });
+    const scrapedProductData = await pollRobotTaskRetrieval(taskId);
 
-      res.on("end", function () {
-        const body = Buffer.concat(chunks);
-        console.log(body.toString());
-      });
-    });
+    // const collection = await getMongoDBCollection();
 
-    req.end();
-    const collection = await getMongoDBCollection();
+    // const { message } = await request.json();
 
-    const { message } = await request.json();
+    // const model = LLM.chatOpenAI;
+    // const prompt = ChatPromptTemplate.fromMessages([
+    //   ["system", qaPrompt],
+    //   new MessagesPlaceholder("messages"),
+    // ]);
 
-    const model = LLM.chatOpenAI;
-    const prompt = ChatPromptTemplate.fromMessages([
-      ["system", qaPrompt],
-      new MessagesPlaceholder("messages"),
-    ]);
+    // const chain = prompt.pipe(model);
 
-    const chain = prompt.pipe(model);
+    // const messageHistory = new MongoDBChatMessageHistory({
+    //   sessionId,
+    //   collection,
+    // });
 
-    const messageHistory = new MongoDBChatMessageHistory({
-      sessionId,
-      collection,
-    });
+    // await messageHistory.addMessage(new HumanMessage(message));
 
-    await messageHistory.addMessage(new HumanMessage(message));
+    // const { content } = await chain.invoke({
+    //   messages: await messageHistory.getMessages(),
+    // });
 
-    const { content } = await chain.invoke({
-      messages: await messageHistory.getMessages(),
-    });
+    // await messageHistory.addMessage(new AIMessage(content.toString()));
 
-    await messageHistory.addMessage(new AIMessage(content.toString()));
-
-    const messageData = {
-      message: content,
-      type: "AI",
-    };
+    // const messageData = {
+    //   message: content,
+    //   type: "AI",
+    // };
 
     return Response.json(
       {
         success: true,
-        data: messageData,
+        data: scrapedProductData,
         message: "Ai response retreived sucessfully!",
       },
       { status: 200 }
