@@ -1,10 +1,10 @@
-import axios from "axios";
-import { request } from "https";
+import axios from 'axios';
+import { request } from 'https';
 
 const getOptions = (path: string) => {
   return {
-    method: "POST",
-    hostname: "api.browse.ai",
+    method: 'POST',
+    hostname: 'api.browse.ai',
     port: null,
     path,
     headers: {
@@ -12,6 +12,12 @@ const getOptions = (path: string) => {
     },
   };
 };
+
+export async function getScrapedProductData(product_desc: string) {
+  const taskId = await scrapeProductDataFromStore(product_desc);
+  const scrapedProductData = await pollRobotTaskRetrieval(taskId);
+  return scrapedProductData;
+}
 
 export async function scrapeProductDataFromStore(
   product: string
@@ -22,11 +28,11 @@ export async function scrapeProductDataFromStore(
     const req = request(options, async (res) => {
       const chunks: Buffer[] = [];
 
-      res.on("data", (chunk) => {
+      res.on('data', (chunk) => {
         chunks.push(chunk);
       });
 
-      res.on("end", async () => {
+      res.on('end', async () => {
         try {
           const body = Buffer.concat(chunks);
           resolve(JSON.parse(body.toString())?.result.id);
@@ -36,7 +42,7 @@ export async function scrapeProductDataFromStore(
       });
     });
 
-    req.on("error", reject);
+    req.on('error', reject);
 
     req.write(
       JSON.stringify({
@@ -66,12 +72,12 @@ export async function pollRobotTaskRetrieval(taskId: string) {
       status = response?.data?.result.status;
       scrapedProductData = response?.data?.result?.capturedLists?.Products;
     } catch (error) {
-      console.error("error", error);
+      console.error('error', error);
     }
   }
   await retrieveRobotTask(); // Make an initial request immediately
 
-  while (status !== "successful") {
+  while (status !== 'successful') {
     await retrieveRobotTask();
     await new Promise((resolve) => setTimeout(resolve, 15000));
   }

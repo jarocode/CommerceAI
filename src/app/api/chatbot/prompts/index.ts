@@ -1,11 +1,14 @@
-// export const qaPrompt = `Answer the user's questions based on the below context.
-// Be friendly and as conversational as possible like a real human would be.
-// If the context doesn't contain any relevant information to the question, don't make something up and just say "I don't know":
+import {
+  ChatPromptTemplate,
+  MessagesPlaceholder,
+} from '@langchain/core/prompts';
 
-// <context>
-// {context}
-// </context>
-// `;
+export const agentPrompt = ChatPromptTemplate.fromMessages([
+  ['system', "You are very powerful assistant, but don't know current events"],
+  ['human', '{input}'],
+  new MessagesPlaceholder('agent_scratchpad'),
+]);
+
 export const qaPrompt = `You are a helpful assistant. Answer all questions to the best of your ability.
 Be friendly and as conversational as possible like a real human would be. 
 `;

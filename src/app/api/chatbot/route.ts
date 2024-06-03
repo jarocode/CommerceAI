@@ -1,29 +1,28 @@
 import {
   ChatPromptTemplate,
   MessagesPlaceholder,
-} from "@langchain/core/prompts";
-import { HumanMessage, AIMessage } from "@langchain/core/messages";
-import { MongoDBChatMessageHistory } from "@langchain/mongodb";
-import { ObjectId } from "mongodb";
-import { request as httpRequest } from "https";
+} from '@langchain/core/prompts';
+import { HumanMessage, AIMessage } from '@langchain/core/messages';
+import { MongoDBChatMessageHistory } from '@langchain/mongodb';
+import { ObjectId } from 'mongodb';
+import { request as httpRequest } from 'https';
 
-import { LLM } from "llms";
-import { getMongoDBCollection } from "utils/dbConnect";
-import { qaPrompt } from "./prompts";
+import { LLM } from 'llms';
+import { getMongoDBCollection } from 'utils/dbConnect';
+import { qaPrompt } from './prompts';
 import {
+  getScrapedProductData,
   pollRobotTaskRetrieval,
   scrapeProductDataFromStore,
-} from "./functions";
+} from './functions';
 
 const sessionId = new ObjectId().toString();
 
 export async function POST(request: Request) {
   try {
-    const taskId = await scrapeProductDataFromStore(
-      "iphone15 promax black color"
+    const scrapedProductData = getScrapedProductData(
+      'iphone15 promax blue color'
     );
-
-    const scrapedProductData = await pollRobotTaskRetrieval(taskId);
 
     // const collection = await getMongoDBCollection();
 
@@ -59,12 +58,12 @@ export async function POST(request: Request) {
       {
         success: true,
         data: scrapedProductData,
-        message: "Ai response retreived sucessfully!",
+        message: 'Ai response retreived sucessfully!',
       },
       { status: 200 }
     );
   } catch (error: unknown) {
-    console.error("Error:", error);
+    console.error('Error:', error);
     return Response.json(
       { success: false, message: error },
       {
