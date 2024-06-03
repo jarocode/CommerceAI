@@ -2,8 +2,9 @@ import { DynamicTool } from '@langchain/core/tools';
 import { getScrapedProductData } from '../functions';
 
 export const customTool = new DynamicTool({
-  name: 'search_products',
-  description: 'use the browseai api to search for products',
+  name: 'search_product',
+  description: `use the browseai api to search for a product based on a given 
+  product description`,
   func: getScrapedProductData,
 });
 

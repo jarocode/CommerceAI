@@ -1,30 +1,30 @@
-import { use, useState, ChangeEvent, KeyboardEvent } from "react";
-import styled from "@emotion/styled";
-import { useMutation } from "@tanstack/react-query";
-import { AxiosError } from "axios";
-import { IoDocumentAttachOutline } from "react-icons/io5";
-import { RiVoiceprintFill } from "react-icons/ri";
-import { IoIosSend } from "react-icons/io";
-import { TbEdit } from "react-icons/tb";
+import { use, useState, ChangeEvent, KeyboardEvent } from 'react';
+import styled from '@emotion/styled';
+import { useMutation } from '@tanstack/react-query';
+import { AxiosError } from 'axios';
+import { IoDocumentAttachOutline } from 'react-icons/io5';
+import { RiVoiceprintFill } from 'react-icons/ri';
+import { IoIosSend } from 'react-icons/io';
+import { TbEdit } from 'react-icons/tb';
 
-import { ChatContext, ChatMessage } from "../context/ChatContext";
-import { colors } from "theme/colors";
-import AppText from "components/AppText";
-import { chatbotApi } from "api-endpoints/chatBot";
+import { ChatContext, ChatMessage } from '../context/ChatContext';
+import { colors } from 'theme/colors';
+import AppText from 'components/AppText';
+import { chatbotApi } from 'api-endpoints/chatBot';
 
 interface SendButtonProps {
   disabled: boolean;
 }
 
 const ChatInput = () => {
-  const [message, setMessage] = useState("");
+  const [message, setMessage] = useState('');
   const { setChatMessages } = use(ChatContext);
 
   const { mutate, isPending } = useMutation({
     mutationFn: chatbotApi.chatShoppingAssistant,
 
     onError: (error: AxiosError) => {
-      if (typeof error === "object") console.log(error);
+      if (typeof error === 'object') console.log(error);
     },
     onSuccess: (data: ChatMessage) => {
       setChatMessages((prev) => [...prev, data]);
@@ -37,8 +37,8 @@ const ChatInput = () => {
 
   const handleClick = () => {
     if (isPending) return;
-    setChatMessages((prev) => [...prev, { message, type: "Human" }]);
-    setMessage("");
+    setChatMessages((prev) => [...prev, { message, type: 'Human' }]);
+    setMessage('');
     mutate(message);
   };
 
@@ -49,7 +49,7 @@ const ChatInput = () => {
   return (
     <Container>
       <TextArea
-        placeholder="Ask anything"
+        placeholder='Ask anything'
         rows={2}
         onChange={handleChange}
         onKeyDown={handleKeyDown}
@@ -59,17 +59,17 @@ const ChatInput = () => {
         <Outer>
           <Div>
             <CircleDiv>
-              <IoDocumentAttachOutline color="#787878" size={"14px"} />
+              <IoDocumentAttachOutline color='#787878' size={'14px'} />
             </CircleDiv>
-            <AppText color="#ABABAB" fontSize="13px">
+            <AppText color='#ABABAB' fontSize='13px'>
               attach docs
             </AppText>
           </Div>
           <Div>
             <CircleDiv>
-              <RiVoiceprintFill color="#787878" size={"14px"} />
+              <RiVoiceprintFill color='#787878' size={'14px'} />
             </CircleDiv>
-            <AppText color="#ABABAB" fontSize="13px">
+            <AppText color='#ABABAB' fontSize='13px'>
               speak to AI
             </AppText>
           </Div>
@@ -77,9 +77,9 @@ const ChatInput = () => {
         <Outer>
           <Div>
             <CircleDiv>
-              <TbEdit color="#787878" size={"14px"} />
+              <TbEdit color='#787878' size={'14px'} />
             </CircleDiv>
-            <AppText color="#ABABAB" fontSize="13px">
+            <AppText color='#ABABAB' fontSize='13px'>
               Improve
             </AppText>
           </Div>
@@ -160,7 +160,7 @@ const SendButton = styled.div<SendButtonProps>`
   display: flex;
   justify-content: center;
   align-items: center;
-  background: ${(props) => (props.disabled ? "#cfcfcf" : colors.dark)};
+  background: ${(props) => (props.disabled ? '#cfcfcf' : colors.dark)};
   height: 2rem;
   width: 2rem;
   border-radius: 50%;

@@ -15,18 +15,20 @@ import {
   pollRobotTaskRetrieval,
   scrapeProductDataFromStore,
 } from './functions';
+import { shoppingAgentExecutor } from './agents';
 
 const sessionId = new ObjectId().toString();
 
 export async function POST(request: Request) {
   try {
-    const scrapedProductData = getScrapedProductData(
-      'iphone15 promax blue color'
-    );
-
     // const collection = await getMongoDBCollection();
 
-    // const { message } = await request.json();
+    const { message } = await request.json();
+    const result = await shoppingAgentExecutor.invoke({
+      input: message,
+    });
+
+    console.log('agentResult:', result);
 
     // const model = LLM.chatOpenAI;
     // const prompt = ChatPromptTemplate.fromMessages([
@@ -49,15 +51,15 @@ export async function POST(request: Request) {
 
     // await messageHistory.addMessage(new AIMessage(content.toString()));
 
-    // const messageData = {
-    //   message: content,
-    //   type: "AI",
-    // };
+    const messageData = {
+      message: result.output,
+      type: 'AI',
+    };
 
     return Response.json(
       {
         success: true,
-        data: scrapedProductData,
+        data: messageData,
         message: 'Ai response retreived sucessfully!',
       },
       { status: 200 }
